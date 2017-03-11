@@ -14,10 +14,10 @@ module Chat
       self.unmarshal_class_method = :decode
       self.service_name = 'chat.Room'
 
-      rpc :Join, JoinRequest, JoinResponse
+      rpc :RegisterUser, RegisterUserRequest, RegisterUserResponse
       rpc :ListUsers, ListUsersRequest, ListUsersResponse
-      rpc :Listen, ListenRequest, stream(IncomingMessage)
-      rpc :Send, stream(OutgoingMessage), stream(OutgoingMessageStatus)
+      rpc :Listen, ListenRequest, stream(ReceiverMessage)
+      rpc :Send, stream(SenderMessage), stream(SenderMessageStatus)
     end
 
     Stub = Service.rpc_stub_class

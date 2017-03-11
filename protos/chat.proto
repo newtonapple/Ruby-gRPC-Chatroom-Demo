@@ -5,10 +5,10 @@ import "google/protobuf/timestamp.proto";
 package chat;
 
 service Room {
-  rpc Join(JoinRequest) returns (JoinResponse);
+  rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
-  rpc Listen(ListenRequest) returns (stream IncomingMessage);
-  rpc Send(stream OutgoingMessage) returns (stream OutgoingMessageStatus);
+  rpc Listen(ListenRequest) returns (stream ReceiverMessage);
+  rpc Send(stream SenderMessage) returns (stream SenderMessageStatus);
 }
 
 enum ResponseStatus {
@@ -17,11 +17,11 @@ enum ResponseStatus {
     ERROR  = 3;
 }
 
-message JoinRequest {
+message RegisterUserRequest {
   string user_name = 1;
 }
 
-message JoinResponse {
+message RegisterUserResponse {
   ResponseStatus status     = 1;
   string         session_id = 2;
 }
@@ -37,22 +37,20 @@ message ListUsersResponse {
 
 message ListenRequest {}
 
-message IncomingMessage {
-  uint64 id                           = 1;
+message ReceiverMessage {
   string uuid                         = 2;
   string user_name                    = 3;
   string text                         = 4;
   google.protobuf.Timestamp timestamp = 5;
 }
 
-message OutgoingMessage {
+message SenderMessage {
   string uuid                = 1;
   string session_id          = 2;
   string text                = 3;
-  repeated string user_names = 4;
 }
 
-message OutgoingMessageStatus {
+message SenderMessageStatus {
   string uuid           = 1;
   ResponseStatus status = 2;
 }

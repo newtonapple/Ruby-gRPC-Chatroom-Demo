@@ -8,12 +8,16 @@ module Chat
       @stub = Room::Stub.new(uri, auth)
     end
 
-    def join(user_name)
-      @stub.join JoinRequest.new(user_name: user_name)
+    def register_user(user_name)
+      @stub.register_user RegisterUserRequest.new(user_name: user_name)
     end
 
     def list_users(query)
       @stub.list_users ListUsersRequest.new(query: query)
+    end
+
+    def listen
+      @stub.listen ListenRequest.new
     end
   end
 end

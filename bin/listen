@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "chat/client"
+
+def run
+  port = (ENV["PORT"] || 50051).to_i
+  host = ENV["HOST"] || 'localhost'
+  uri = "#{host}:#{port}"
+  puts "listening @ #{uri}..."
+  client = Chat::Client.new(uri)
+  messages = client.listen
+  messages.each do |msg|
+    ts = Time.at(msg.timestamp.seconds, msg.timestamp.nanos / 1000)
+    puts "[#{ts}##{msg.uuid}] @#{msg.user_name}: #{msg.text}"
+  end
+end
+
+if __FILE__ == $0
+  run
+end

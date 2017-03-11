@@ -5,10 +5,10 @@ require 'google/protobuf'
 
 require 'google/protobuf/timestamp_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
-  add_message "chat.JoinRequest" do
+  add_message "chat.RegisterUserRequest" do
     optional :user_name, :string, 1
   end
-  add_message "chat.JoinResponse" do
+  add_message "chat.RegisterUserResponse" do
     optional :status, :enum, 1, "chat.ResponseStatus"
     optional :session_id, :string, 2
   end
@@ -21,20 +21,18 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   end
   add_message "chat.ListenRequest" do
   end
-  add_message "chat.IncomingMessage" do
-    optional :id, :uint64, 1
+  add_message "chat.ReceiverMessage" do
     optional :uuid, :string, 2
     optional :user_name, :string, 3
     optional :text, :string, 4
     optional :timestamp, :message, 5, "google.protobuf.Timestamp"
   end
-  add_message "chat.OutgoingMessage" do
+  add_message "chat.SenderMessage" do
     optional :uuid, :string, 1
     optional :session_id, :string, 2
     optional :text, :string, 3
-    repeated :user_names, :string, 4
   end
-  add_message "chat.OutgoingMessageStatus" do
+  add_message "chat.SenderMessageStatus" do
     optional :uuid, :string, 1
     optional :status, :enum, 2, "chat.ResponseStatus"
   end
@@ -46,13 +44,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
 end
 
 module Chat
-  JoinRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.JoinRequest").msgclass
-  JoinResponse = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.JoinResponse").msgclass
+  RegisterUserRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.RegisterUserRequest").msgclass
+  RegisterUserResponse = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.RegisterUserResponse").msgclass
   ListUsersRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.ListUsersRequest").msgclass
   ListUsersResponse = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.ListUsersResponse").msgclass
   ListenRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.ListenRequest").msgclass
-  IncomingMessage = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.IncomingMessage").msgclass
-  OutgoingMessage = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.OutgoingMessage").msgclass
-  OutgoingMessageStatus = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.OutgoingMessageStatus").msgclass
+  ReceiverMessage = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.ReceiverMessage").msgclass
+  SenderMessage = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.SenderMessage").msgclass
+  SenderMessageStatus = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.SenderMessageStatus").msgclass
   ResponseStatus = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.ResponseStatus").enummodule
 end

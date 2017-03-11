@@ -7,14 +7,14 @@ def run(user_name)
   port = (ENV["PORT"] || 50051).to_i
   host = ENV["HOST"] || 'localhost'
   uri = "#{host}:#{port}"
-  puts "joining: #{uri}..."
+  puts "registering user_name: #{user_name} @ #{uri}..."
   client = Chat::Client.new(uri)
-  resp = client.join(user_name)
+  resp = client.register_user(user_name)
   case resp.status
   when :OK
     puts "session_id: #{resp.session_id}"
   when :REJECT
-    puts "user_name taken..."
+    puts "user_name: #{user_name} is already in use..."
   else
     puts "ERROR!"
   end
