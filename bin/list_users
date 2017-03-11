@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "chat/client"
+require "pp"
+def run(query)
+  port = (ENV["PORT"] || 50051).to_i
+  host = ENV["HOST"] || 'localhost'
+  uri = "#{host}:#{port}"
+  puts "listing users @#{uri}: \"#{query}\""
+  client = Chat::Client.new(uri)
+  resp = client.list_users(query)
+  puts "number of people in the room: #{resp.size}"
+  puts "users:\n* #{resp.user_names.join("\n* ")}" if resp.size > 0
+end
+
+
+if __FILE__ == $0
+  run ARGV[0] || ''
+end

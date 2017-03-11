@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require 'chat/server'
+
+def run
+  s = GRPC::RpcServer.new
+  server_uri = "0.0.0.0:#{ENV['PORT'] || 50051}"
+  s.add_http2_port(server_uri, :this_port_is_insecure)
+  s.handle(Chat::Server.new)
+  puts server_uri
+  s.run_till_terminated
+end
+
+if __FILE__ == $0
+  run
+end

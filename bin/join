@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "chat/client"
+
+def run(user_name)
+  port = (ENV["PORT"] || 50051).to_i
+  host = ENV["HOST"] || 'localhost'
+  uri = "#{host}:#{port}"
+  puts "joining: #{uri}..."
+  client = Chat::Client.new(uri)
+  resp = client.join(user_name)
+  case resp.status
+  when :OK
+    puts "session_id: #{resp.session_id}"
+  when :REJECT
+    puts "user_name taken..."
+  else
+    puts "ERROR!"
+  end
+end
+
+if __FILE__ == $0
+  run ARGV[0] if ARGV[0]
+end

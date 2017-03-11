@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package chat;
+
+service Room {
+  rpc Join(JoinRequest) returns (JoinResponse);
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+  rpc Listen(ListenRequest) returns (stream IncomingMessage);
+  rpc Send(stream OutgoingMessage) returns (stream OutgoingMessageStatus);
+}
+
+enum ResponseStatus {
+    OK     = 0;
+    REJECT = 1;
+    ERROR  = 3;
+}
+
+message JoinRequest {
+  string user_name = 1;
+}
+
+message JoinResponse {
+  ResponseStatus status     = 1;
+  string         session_id = 2;
+}
+
+message ListUsersRequest {
+  string query = 1;
+}
+
+message ListUsersResponse {
+  uint32 size = 1;
+  repeated string user_names = 2;
+}
+
+message ListenRequest {}
+
+message IncomingMessage {
+  uint64 id                           = 1;
+  string uuid                         = 2;
+  string user_name                    = 3;
+  string text                         = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+message OutgoingMessage {
+  string uuid                = 1;
+  string session_id          = 2;
+  string text                = 3;
+  repeated string user_names = 4;
+}
+
+message OutgoingMessageStatus {
+  string uuid           = 1;
+  ResponseStatus status = 2;
+}
