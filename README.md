@@ -1,39 +1,24 @@
-# Chat
+# A Ruby gRPC Chatroom Demo
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/chat`. To experiment with that code, run `bin/console` for an interactive prompt.
+This is a toy chatroom demo using Ruby & gRPC.  
 
-TODO: Delete this and the text above, and describe your gem
+## Running the Demo
 
-## Installation
+`bundle install`
 
-Add this line to your application's Gemfile:
+`bin/server` will start the chat server at default port 50051.
 
-```ruby
-gem 'chat'
-```
+`bin/register_user user_name` will register a user_name with the server.  Upon success, user will be given a `session_id` to be used for sending messages to the server.  Think of this as an access token.  All user_names must be *unique* on the server and each `user_name` only has one `session_id`.  There is no way to unregister.
 
-And then execute:
+`bin/randoms session_id` will create a random chat bot using the given `session_id` that generates 0-5 messages every 0-5 seconds.
 
-    $ bundle
+`bin/randoms` will create 10 random chat bots & register them with the server.
 
-Or install it yourself as:
+`bin/listen` will stream & print out all messages going through the chatroom service.  You don't need a `session_id`.
 
-    $ gem install chat
+`bin/list_users Regpex` will list all user_names currently registered on the server matching the regular expression pattern that is given. You don't need a `session_id` to `list_users`.
 
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/newtonapple/chat.
-
+See [protos/chat.proto](protos/chat.proto) for the service's API spec.
 
 ## License
 
