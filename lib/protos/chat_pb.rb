@@ -32,9 +32,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :session_id, :string, 2
     optional :text, :string, 3
   end
-  add_message "chat.SenderMessageStatus" do
+  add_message "chat.SenderMessageResponse" do
     optional :uuid, :string, 1
-    optional :status, :enum, 2, "chat.ResponseStatus"
+    optional :timestamp, :message, 2, "google.protobuf.Timestamp"
+    optional :status, :enum, 3, "chat.ResponseStatus"
   end
   add_enum "chat.ResponseStatus" do
     value :OK, 0
@@ -51,6 +52,6 @@ module Chat
   ListenRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.ListenRequest").msgclass
   ReceiverMessage = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.ReceiverMessage").msgclass
   SenderMessage = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.SenderMessage").msgclass
-  SenderMessageStatus = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.SenderMessageStatus").msgclass
+  SenderMessageResponse = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.SenderMessageResponse").msgclass
   ResponseStatus = Google::Protobuf::DescriptorPool.generated_pool.lookup("chat.ResponseStatus").enummodule
 end

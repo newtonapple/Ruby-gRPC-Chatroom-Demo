@@ -17,7 +17,7 @@ module Chat
       rpc :RegisterUser, RegisterUserRequest, RegisterUserResponse
       rpc :ListUsers, ListUsersRequest, ListUsersResponse
       rpc :Listen, ListenRequest, stream(ReceiverMessage)
-      rpc :Send, stream(SenderMessage), stream(SenderMessageStatus)
+      rpc :Send, stream(SenderMessage), stream(SenderMessageResponse)
     end
 
     Stub = Service.rpc_stub_class

@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require File.join(File.expand_path(File.dirname(__FILE__)), "bots", "random_bot")
+
+if __FILE__ == $0
+  if ARGV[0]
+    port = (ENV["PORT"] || 50051).to_i
+    host = ENV["HOST"] || 'localhost'
+    uri = "#{host}:#{port}"
+    puts "starting random bot @ #{uri}..."
+    RandomBot.new(uri, ARGV[0]).run
+  else
+    puts "please enter your session_id."
+  end
+end

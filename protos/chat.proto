@@ -8,7 +8,7 @@ service Room {
   rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
   rpc Listen(ListenRequest) returns (stream ReceiverMessage);
-  rpc Send(stream SenderMessage) returns (stream SenderMessageStatus);
+  rpc Send(stream SenderMessage) returns (stream SenderMessageResponse);
 }
 
 enum ResponseStatus {
@@ -45,12 +45,13 @@ message ReceiverMessage {
 }
 
 message SenderMessage {
-  string uuid                = 1;
-  string session_id          = 2;
-  string text                = 3;
+  string uuid        = 1;
+  string session_id  = 2;
+  string text        = 3;
 }
 
-message SenderMessageStatus {
-  string uuid           = 1;
-  ResponseStatus status = 2;
+message SenderMessageResponse {
+  string                    uuid      = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  ResponseStatus            status    = 3;
 }

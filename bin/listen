@@ -12,7 +12,7 @@ def run
   messages = client.listen
   messages.each do |msg|
     ts = Time.at(msg.timestamp.seconds, msg.timestamp.nanos / 1000)
-    puts "[#{ts}##{msg.uuid}] @#{msg.user_name}: #{msg.text}"
+    puts "[#{ts} | ##{msg.uuid} | @#{msg.user_name}]:\n\t#{msg.text}"
   end
 end
 
