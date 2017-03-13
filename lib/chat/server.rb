@@ -16,9 +16,10 @@ module Chat
         loop do
           receiver_message = @message_queue.pop
           dead = []
-          puts @broadcast_queues.size
           @broadcast_queues.each do |listen_call, q|
-            if listen_call.cancelled?
+            # note cancelled here actually doesn't work...
+            # we'll do a hard reset if broadcast queue reaches a size of 10.
+            if listen_call.cancelled? || q.size >= 10
               dead << listen_call
             else
               q.push receiver_message
@@ -50,7 +51,7 @@ module Chat
         user_names = @user_names.grep(pattern)
         ListUsersResponse.new size: user_names.size, user_names: user_names
       end
-    rescue Exception => e
+    rescue Exception
       ListUsersResponse.new size: @user_names.size, user_names: @user_names.to_a
     end
 

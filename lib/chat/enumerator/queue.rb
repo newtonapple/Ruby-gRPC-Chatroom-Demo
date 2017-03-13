@@ -4,8 +4,8 @@ module Chat
   class EnumeratorQueue
     extend Forwardable
     def_delegators :@q, :push
-    attr_reader :q
-    
+    def_delegators :@q, :size
+
     def initialize(sentinel)
       @q = Queue.new
       @sentinel = sentinel

@@ -2,6 +2,19 @@
 
 require "bundler/setup"
 require 'chat/server'
+require 'logger'
+
+module SeverLogger
+  def logger
+    LOGGER
+  end
+
+  LOGGER = Logger.new(STDOUT)
+end
+
+module GRPC
+  extend SeverLogger
+end
 
 def run
   s = GRPC::RpcServer.new(max_waiting_requests: 2000, pool_size: 2000)
