@@ -30,7 +30,7 @@ module Chat
       @stub = Room::Stub.new(uri, auth)
       @session_id = session_id
       @messages = EnumeratorQueue.new self
-      @message_responses = @stub.send(@messages)
+      @message_responses = @stub.send(@messages.each)
     end
 
     def send(text)

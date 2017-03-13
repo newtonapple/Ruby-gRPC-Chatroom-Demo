@@ -18,8 +18,7 @@ module Chat
           dead = []
           @broadcast_queues.each do |listen_call, q|
             # note cancelled here actually doesn't work...
-            # we'll do a hard reset if broadcast queue reaches a size of 10.
-            if listen_call.cancelled? || q.size >= 10
+            if listen_call.cancelled?
               dead << listen_call
             else
               q.push receiver_message
@@ -62,7 +61,7 @@ module Chat
       welcome = ReceiverMessage.new(
         uuid: SecureRandom.uuid,
         user_name: "SYSTEM",
-        text: "Welcome, there are currently #{@user_names.size} agents in the room.",
+        text: "Welcome, there are currently #{@user_names.size} regisetered agents in the room.",
         timestamp: Google::Protobuf::Timestamp.new(seconds: now.to_i, nanos: now.nsec)
       )
       q.push welcome
