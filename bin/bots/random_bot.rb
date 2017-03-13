@@ -55,10 +55,8 @@ class RandomBot
   ].freeze
 
   attr_reader :client
-  attr_accessor :session_id
 
   def initialize(uri, session_id)
-    @session_id
     @client = Chat::RegisteredClient.new(uri, session_id)
   end
 

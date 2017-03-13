@@ -3,19 +3,38 @@
 require "bundler/setup"
 require "chat/client"
 
-def run
+def run(num_of_messages)
   port = (ENV["PORT"] || 50051).to_i
   host = ENV["HOST"] || 'localhost'
   uri = "#{host}:#{port}"
-  puts "listening @ #{uri}..."
   client = Chat::Client.new(uri)
-  messages = client.listen
-  messages.each do |msg|
-    ts = Time.at(msg.timestamp.seconds, msg.timestamp.nanos / 1000)
-    puts "[#{ts} | ##{msg.uuid} | @#{msg.user_name}]:\n\t#{msg.text}"
+  if num_of_messages == 0
+    puts "*** Listening @ #{uri}..."
+    messages = client.listen
+    messages.each { |msg| print_message(msg)}
+  else
+    puts "*** Listening @ #{uri}... Stream will be cancelled after #{num_of_messages} messages..."
+    op = client.listen(true)
+    messages = op.execute
+    num_of_messages.times { print_message(messages.next) }
+    puts "*** Sleeping for 10 seconds before cancellation..."
+    sleep(10)
+    op.cancel
+    puts "*** Cancelled!"
+    begin
+      messages.next
+    rescue Exception => e
+      puts "*** Can't read stream any more: #{e.inspect}"
+    end
+    puts "*** Exiting"
   end
 end
 
+def print_message(msg)
+  ts = Time.at(msg.timestamp.seconds, msg.timestamp.nanos / 1000)
+  puts "[#{ts} | ##{msg.uuid} | @#{msg.user_name}]:\n\t#{msg.text}"
+end
+
 if __FILE__ == $0
-  run
+  run(ARGV[0].to_i)
 end

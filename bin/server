@@ -4,7 +4,7 @@ require "bundler/setup"
 require 'chat/server'
 
 def run
-  s = GRPC::RpcServer.new(max_waiting_requests: 2000, pool_size: 100)
+  s = GRPC::RpcServer.new(max_waiting_requests: 2000, pool_size: 2000)
   server_uri = "0.0.0.0:#{ENV['PORT'] || 50051}"
   s.add_http2_port(server_uri, :this_port_is_insecure)
   s.handle(Chat::Server.new)

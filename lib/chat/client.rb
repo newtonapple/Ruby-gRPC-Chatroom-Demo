@@ -17,8 +17,8 @@ module Chat
       @stub.list_users ListUsersRequest.new(query: query)
     end
 
-    def listen
-      @stub.listen ListenRequest.new
+    def listen(return_op=false)
+      @stub.listen(ListenRequest.new, return_op: return_op)
     end
   end
 
