@@ -11,13 +11,20 @@ module Chat
       @session_ids = {}  # session_id to user_name mapping
       @user_names  = Set.new
       @message_queue  = Queue.new
-      @delivery_queues = Set.new
-      @boardcast_thread = Thread.new do
+      @broadcast_queues = {}
+      @broadcast_thread = Thread.new do
         loop do
           receiver_message = @message_queue.pop
-          @delivery_queues.each do |q|
-            q.push receiver_message
+          dead = []
+          puts @broadcast_queues.size
+          @broadcast_queues.each do |listen_call, q|
+            if listen_call.cancelled?
+              dead << listen_call
+            else
+              q.push receiver_message
+            end
           end
+          dead.each{ |dead_listen_call| @broadcast_queues.delete(dead_listen_call) }
         end
       end
     end
@@ -47,9 +54,9 @@ module Chat
       ListUsersResponse.new size: @user_names.size, user_names: @user_names.to_a
     end
 
-    def listen(listen_request, _unused_call)
+    def listen(listen_request, listen_call)
       q = EnumeratorQueue.new self
-      @delivery_queues << q
+      @broadcast_queues[listen_call] = q
       now = Time.now
       welcome = ReceiverMessage.new(
         uuid: SecureRandom.uuid,
