@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require "bundler/setup"
 
-require File.join(File.expand_path(File.dirname(__FILE__)), "bots", "random_bot_swarm")
+require_relative File.join("bots", "random_bot_swarm")
 
 if __FILE__ == $0
   port = (ENV["PORT"] || 50051).to_i
@@ -9,6 +9,7 @@ if __FILE__ == $0
   uri = "#{host}:#{port}"
   swarm_name = ARGV[0] || 'randbot'
   size = (ARGV[1] || 10).to_i
+  use_single_client = ARGV[2].nil?
   puts "starting random bot swarm #{swarm_name} of size #{size} @ #{uri}..."
-  RandomBotSwarm.new(uri, swarm_name, size).run
+  RandomBotSwarm.new(uri, swarm_name, size).run(use_single_client)
 end

@@ -11,12 +11,14 @@ def run(num_of_messages)
   if num_of_messages == 0
     puts "*** Listening @ #{uri}..."
     messages = client.listen
-    messages.each { |msg| print_message(msg)}
+    count = 0
+    messages.each { |msg| count += 1; print_message(msg, count) }
+    puts "Server terminated connection..."
   else
     puts "*** Listening @ #{uri}... Stream will be cancelled after #{num_of_messages} messages..."
     op = client.listen(true)
     messages = op.execute
-    num_of_messages.times { print_message(messages.next) }
+    num_of_messages.times { |i| print_message(messages.next, i+1) }
     puts "*** Sleeping for 10 seconds before cancellation..."
     sleep(10)
     op.cancel
@@ -30,9 +32,9 @@ def run(num_of_messages)
   end
 end
 
-def print_message(msg)
+def print_message(msg, count)
   ts = Time.at(msg.timestamp.seconds, msg.timestamp.nanos / 1000)
-  puts "[#{ts} | ##{msg.uuid} | @#{msg.user_name}]:\n\t#{msg.text}"
+  puts "[#{ts} | ##{msg.uuid} | @#{msg.user_name}] (#{count}):\n\t#{msg.text}"
 end
 
 if __FILE__ == $0

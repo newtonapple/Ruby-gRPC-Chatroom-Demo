@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
-require File.join(File.expand_path(File.dirname(__FILE__)), "bots", "random_bot")
+require_relative ile.join("bots", "random_bot")
 
 if __FILE__ == $0
   if ARGV[0]

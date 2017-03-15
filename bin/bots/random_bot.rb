@@ -56,18 +56,31 @@ class RandomBot
 
   attr_reader :client
 
-  def initialize(uri, session_id)
-    @client = Chat::RegisteredClient.new(uri, session_id)
+  def self.run(client, session_id)
+    messages = Chat::EnumeratorQueue.new client
+    resps = client.send(session_id, messages)
+    each_message do |msg|
+      messages.push Chat::Client.sender_message(session_id, msg)
+      puts resps.next.inspect
+    end
   end
 
-  def run
+  def self.each_message
     loop do
       sleep((rand * 5).round)
       msgs = MESSAGES.sample((rand * 5).round)
       msgs.each do |msg|
-        @client.send msg
-        puts @client.message_responses.next.inspect
+        yield msg
       end
     end
+  end
+
+  def initialize(uri, session_id)
+    @session_id = session_id
+    @client = Chat::Client.new(uri)
+  end
+
+  def run
+    self.class.run(@client, @session_id)
   end
 end

@@ -18,8 +18,10 @@ module Chat
           dead = []
           @broadcast_queues.each do |listen_call, q|
             # note cancelled here actually doesn't work...
-            if listen_call.cancelled?
+            # we'll kill the listener if it can't keep up
+            if listen_call.cancelled? || (q.size - @message_queue.size) > 500
               dead << listen_call
+              q.push GRPC::BadStatus.new_status_exception(GRPC::Core::StatusCodes::CANCELLED, "Buffered message queue reached its limit. global: #{@message_queue.size}, this: #{q.size}")
             else
               q.push receiver_message
             end
